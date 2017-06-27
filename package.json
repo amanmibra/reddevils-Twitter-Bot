@@ -2,7 +2,7 @@
   "name": "twitter-bot",
   "version": "1.0.0",
   "description": "Aman's twitter bot",
-  "main": "bot.js",
+  "main": "./src/bot.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
