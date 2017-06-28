@@ -22,7 +22,7 @@ var filename = "../images/gort.jpg";
 var msg = "This picture is so good, I will post it twice! #Gort";
 //makeMediaPost(filename, msg);
 
-redditRequest()
+redditRequest();
 
 function replyToTweet(event) {
   var replyTo = event.in_reply_to_screen_name;
@@ -106,7 +106,8 @@ function tweeted(err, data, response) {
 
 function dailyTweet(permalink){
   console.log('perma ', permalink);
-  var reddevilsTweet = "Check out today's top post on /r/reddevils \n " + permalink;
+  var reddevilsTweet = "Check out today's top post on /r/reddevils \n " +
+  "reddit.com" + permalink;
   tweetIt(reddevilsTweet);
 }
 
@@ -116,6 +117,7 @@ function redditRequest(){
     permalink = redditResponse.data.children[0].data.permalink;
     var newPermalink = permalink.toString();
     console.log(newPermalink);
-    dailyTweet(newPermalink)
+    dailyTweet(newPermalink);
+    setInterval(redditRequest, 1000*60*60*24);
   });
 }
