@@ -22,7 +22,7 @@ var filename = "../images/gort.jpg";
 var msg = "This picture is so good, I will post it twice! #Gort";
 //makeMediaPost(filename, msg);
 
-redditRequest(url);
+redditRequest();
 
 function replyToTweet(event) {
   var replyTo = event.in_reply_to_screen_name;
