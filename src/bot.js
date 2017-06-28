@@ -1,17 +1,28 @@
 console.log('The bot is working');
+
+//packages needed
 var Twit = require('twit');
 var config = require('./config');
 var fs = require('fs');
+var request = require('request');
+var http = require('http');
 
+//global variables
+var url = "http://www.reddit.com/r/reddevils/top.json?sort=top&t=day&limit=1";
+var permalink = '';
 var T = new Twit(config);
 var stream = T.stream('user');
 
+//streams
 stream.on('follow', followed);
 stream.on('tweet', replyToTweet)
 
+//makeMediaPost test variables
 var filename = "../images/gort.jpg";
 var msg = "This picture is so good, I will post it twice! #Gort";
 //makeMediaPost(filename, msg);
+
+redditRequest()
 
 function replyToTweet(event) {
   var replyTo = event.in_reply_to_screen_name;
@@ -38,7 +49,7 @@ function replyToTweet(event) {
       var tweetMsg = '@' + from + ' Thanks for tweeting me!'
       var newTweet = {
         status: tweetMsg,
-        in_reply_to_status_id: tweetID  
+        in_reply_to_status_id: tweetID
       }
       T.post('statuses/update', newTweet, tweeted);
     }
@@ -91,4 +102,20 @@ function tweeted(err, data, response) {
   } else {
     console.log('It worked!');
   }
+}
+
+function dailyTweet(permalink){
+  console.log('perma ', permalink);
+  var reddevilsTweet = "Check out today's top post on /r/reddevils \n " + permalink;
+  tweetIt(reddevilsTweet);
+}
+
+function redditRequest(){
+  request(url, function(error, response, body) {
+    var redditResponse = JSON.parse(body);
+    permalink = redditResponse.data.children[0].data.permalink;
+    var newPermalink = permalink.toString();
+    console.log(newPermalink);
+    dailyTweet(newPermalink)
+  });
 }
