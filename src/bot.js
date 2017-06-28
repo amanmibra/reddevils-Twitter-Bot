@@ -13,35 +13,53 @@ var filename = "../images/gort.jpg";
 var msg = "This picture is so good, I will post it twice! #Gort";
 //makeMediaPost(filename, msg);
 
-function replyToTweet(event){
+function replyToTweet(event) {
   var replyTo = event.in_reply_to_screen_name;
   var text = event.text;
   var from = event.user.screen_name;
+  var fromTweet = event.text;
+  var fromTweetLwrcse = fromTweet.toLowerCase();
   var tweetID = event.id_str;
 
-  if(replyTo == "NotABot_0001"){
-    var tweetMsg = '@' + from + ' Thanks for tweeting me!'
-    var newTweet = {
-      status: tweetMsg,
-      in_reply_to_status_id: tweetID
+  var randNumChecker = fromTweetLwrcse.search("random") != -1 && fromTweetLwrcse.search("number") != -1;
+  console.log('fromTweetLwrcse', fromTweetLwrcse);
+  console.log('fromTweetLwrcse.search("Random")', fromTweetLwrcse.search("Random"));
+
+  if (replyTo == "NotABot_0001") {
+    if (randNumChecker) {
+      var number = Math.round(Math.random() * 100);
+      var tweetMsg = '@' + from + ' ' + number;
+      var newTweet = {
+        status: tweetMsg,
+        in_reply_to_status_id: tweetID
+      }
+      T.post('statuses/update', newTweet, tweeted);
+    } else {
+      var tweetMsg = '@' + from + ' Thanks for tweeting me!'
+      var newTweet = {
+        status: tweetMsg,
+        in_reply_to_status_id: tweetID
+      }
+      T.post('statuses/update', newTweet, tweeted);
     }
-    T.post('statuses/update', newTweet, tweeted);
   }
 }
 
-function makeMediaPost(filename, msg){
+function makeMediaPost(filename, msg) {
   var params = {
-    encoding: "base64",
+    encoding: "base64"
   };
   var b64 = fs.readFileSync(filename, params);
 
-  T.post('media/upload', { media_data: b64 }, uploaded);
+  T.post('media/upload', {
+    media_data: b64
+  }, uploaded);
 
-  function uploaded(err, data, response){
+  function uploaded(err, data, response) {
     var id = data.media_id_string;
     var media_tweet = {
       status: msg,
-      media_ids: [id],
+      media_ids: [id]
     }
 
     T.post('statuses/update', media_tweet, tweeted);
@@ -60,7 +78,7 @@ function followed(event) {
 
 function tweetIt(input) {
   var tweet = {
-    status: input,
+    status: input
   };
 
   T.post('statuses/update', tweet, tweeted);
