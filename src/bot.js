@@ -7,9 +7,27 @@ var T = new Twit(config);
 var stream = T.stream('user');
 
 stream.on('follow', followed);
+stream.on('tweet', replyToTweet)
+
 var filename = "../images/gort.jpg";
 var msg = "This picture is so good, I will post it twice! #Gort";
-makeMediaPost(filename, msg);
+//makeMediaPost(filename, msg);
+
+function replyToTweet(event){
+  var replyTo = event.in_reply_to_screen_name;
+  var text = event.text;
+  var from = event.user.screen_name;
+  var tweetID = event.id_str;
+
+  if(replyTo == "NotABot_0001"){
+    var tweetMsg = '@' + from + ' Thanks for tweeting me!'
+    var newTweet = {
+      status: tweetMsg,
+      in_reply_to_status_id: tweetID
+    }
+    T.post('statuses/update', newTweet, tweeted);
+  }
+}
 
 function makeMediaPost(filename, msg){
   var params = {
@@ -51,6 +69,7 @@ function tweetIt(input) {
 function tweeted(err, data, response) {
   if (err) {
     console.log('Not working');
+    console.log(err);
   } else {
     console.log('It worked!');
   }
