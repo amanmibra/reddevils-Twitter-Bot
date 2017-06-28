@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/amanmibra/Twitter-Bot/issues"
   },
-  "homepage": "https://github.com/amanmibra/Twitter-Bot#readme"
+  "homepage": "https://github.com/amanmibra/Twitter-Bot#readme",
+  "dependencies": {
+    "ajax-request": "^1.2.3"
+  }
 }
