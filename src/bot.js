@@ -14,8 +14,8 @@ var T = new Twit(config);
 var stream = T.stream('user');
 
 //streams
-stream.on('follow', followed);
-stream.on('tweet', replyToTweet)
+//stream.on('follow', followed);
+//stream.on('tweet', replyToTweet)
 
 //makeMediaPost test variables
 var filename = "../images/gort.jpg";
