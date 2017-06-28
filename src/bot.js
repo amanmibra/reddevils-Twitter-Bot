@@ -8,7 +8,7 @@ var request = require('request');
 var http = require('http');
 
 //global variables
-var url = "http://www.reddit.com/r/reddevils/top.json?sort=top&t=day&limit=1";
+var url = "https://www.reddit.com/r/reddevils/top.json?sort=top&t=hour&limit=1";
 var permalink = '';
 var T = new Twit(config);
 var stream = T.stream('user');
@@ -33,8 +33,6 @@ function replyToTweet(event) {
   var tweetID = event.id_str;
 
   var randNumChecker = fromTweetLwrcse.search("random") != -1 && fromTweetLwrcse.search("number") != -1;
-  console.log('fromTweetLwrcse', fromTweetLwrcse);
-  console.log('fromTweetLwrcse.search("Random")', fromTweetLwrcse.search("Random"));
 
   if (replyTo == "NotABot_0001") {
     if (randNumChecker) {
@@ -104,9 +102,9 @@ function tweeted(err, data, response) {
   }
 }
 
-function dailyTweet(permalink){
+function hourlyTweet(permalink, title){
   console.log('perma ', permalink);
-  var reddevilsTweet = "Check out today's top post on /r/reddevils \n " +
+  var reddevilsTweet = "Title: \"" + title + "\" \n " +
   "reddit.com" + permalink;
   tweetIt(reddevilsTweet);
 }
@@ -116,8 +114,9 @@ function redditRequest(){
     var redditResponse = JSON.parse(body);
     permalink = redditResponse.data.children[0].data.permalink;
     var newPermalink = permalink.toString();
-    console.log(newPermalink);
-    dailyTweet(newPermalink);
-    setInterval(redditRequest, 1000*60*60*24);
+    var title = redditResponse.data.children[0].data.title.toString();
+    console.log(newPermalink, title);
+    hourlyTweet(newPermalink);
+    setInterval(redditRequest, 1000*60*60);
   });
 }
