@@ -15,7 +15,7 @@ var stream = T.stream('user');
 
 //streams
 //stream.on('follow', followed);
-//stream.on('tweet', replyToTweet)
+stream.on('tweet', replyToTweet)
 
 //makeMediaPost test variables
 var filename = "../images/gort.jpg";
@@ -116,7 +116,7 @@ function redditRequest(){
     var newPermalink = permalink.toString();
     var title = redditResponse.data.children[0].data.title.toString();
     console.log(newPermalink, title);
-    hourlyTweet(newPermalink);
+    hourlyTweet(newPermalink, title);
     setInterval(redditRequest, 1000*60*60);
   });
 }
