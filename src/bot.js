@@ -38,7 +38,7 @@ function replyToTweet(event) {
       var tweetMsg = '@' + from + ' Thanks for tweeting me!'
       var newTweet = {
         status: tweetMsg,
-        in_reply_to_status_id: tweetID
+        in_reply_to_status_id: tweetID  
       }
       T.post('statuses/update', newTweet, tweeted);
     }
