@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/amanmibra/Twitter-Bot#readme",
   "dependencies": {
-    "ajax-request": "^1.2.3"
+    "ajax-request": "^1.2.3",
+    "twit": "^2.2.9"
   }
 }
