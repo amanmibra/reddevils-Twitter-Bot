@@ -112,7 +112,7 @@ function hourlyTweet(permalink, title){
 function redditRequest(){
   request(url, function(error, response, body) {
     var redditResponse = JSON.parse(body);
-    if(redditResponse.data.children.length > 0){
+    if(redditResponse.data.children.length > 0 && error == "null"){
       permalink = redditResponse.data.children[0].data.permalink;
       var permaString = permalink.toString();
       var title = redditResponse.data.children[0].data.title.toString();
