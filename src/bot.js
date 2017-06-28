@@ -105,8 +105,7 @@ function tweeted(err, data, response) {
 
 function hourlyTweet(permalink, title){
   console.log('perma ', permalink);
-  var reddevilsTweet = "Title: \"" + title + "\" \n " +
-  "reddit.com" + permalink;
+  var reddevilsTweet = "reddit.com" + permalink;
   tweetIt(reddevilsTweet);
 }
 
