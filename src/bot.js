@@ -34,7 +34,7 @@ function replyToTweet(event) {
 
   var randNumChecker = fromTweetLwrcse.search("random") != -1 && fromTweetLwrcse.search("number") != -1;
 
-  if (replyTo == "NotABot_0001") {
+  if (replyTo == "reddevilsbot" || text.search("@reddevilsbot") != -1) {
     if (randNumChecker) {
       var number = Math.round(Math.random() * 100);
       var tweetMsg = '@' + from + ' ' + number;
