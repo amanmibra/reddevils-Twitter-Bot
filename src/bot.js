@@ -103,9 +103,10 @@ function tweeted(err, data, response) {
   }
 }
 
-function hourlyTweet(permalink, title){
+function hourlyTweet(permalink, author){
   console.log('perma ', permalink);
-  var reddevilsTweet = "reddit.com" + permalink;
+  var reddevilsTweet = "Submitted by: /u/" + author + "\n" +  "reddit.com" + permalink;
+  console.log(reddevilsTweet)
   tweetIt(reddevilsTweet);
 }
 
@@ -116,8 +117,8 @@ function redditRequest(){
       permalink = redditResponse.data.children[0].data.permalink;
       var permaString = permalink.toString();
       var title = redditResponse.data.children[0].data.title.toString();
-      console.log(permaString, title);
-      hourlyTweet(permaString, title);
+      var author = redditResponse.data.children[0].data.author.toString();
+      hourlyTweet(permaString, author);
     } else {
       var newURL = "https://www.reddit.com/r/reddevils/new.json?limit=1";
       request(newURL, function(newError, newResponse, newBody){
@@ -125,7 +126,8 @@ function redditRequest(){
           var newRedditResponse = JSON.parse(newBody);
           var newPermalink = newRedditResponse.data.children[0].data.permalink.toString();
           var newTitle = newRedditResponse.data.children[0].data.title.toString();
-          hourlyTweet(newPermalink, newTitle);
+          var author = redditResponse.data.children[0].data.author.toString();
+          hourlyTweet(newPermalink, author);
         } else{
           console.log('Last case scenario', newError);
         }
