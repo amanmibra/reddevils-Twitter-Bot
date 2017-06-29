@@ -112,7 +112,7 @@ function hourlyTweet(permalink, title){
 function redditRequest(){
   request(url, function(error, response, body) {
     var redditResponse = JSON.parse(body);
-    if(redditResponse.data.children.length > 0 && error == "null"){
+    if(redditResponse.data.children.length > 0 && error.toString() == "null"){
       permalink = redditResponse.data.children[0].data.permalink;
       var permaString = permalink.toString();
       var title = redditResponse.data.children[0].data.title.toString();
@@ -121,7 +121,7 @@ function redditRequest(){
     } else {
       var newURL = "https://www.reddit.com/r/reddevils/new.json?limit=1";
       request(newURL, function(newError, newResponse, newBody){
-        if(newError == "null"){
+        if(newError.toString() == "null"){
           var newRedditResponse = JSON.parse(newBody);
           var newPermalink = newRedditResponse.data.children[0].data.permalink.toString();
           var newTitle = newRedditResponse.data.children[0].data.title.toString();
