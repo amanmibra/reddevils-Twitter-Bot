@@ -14,13 +14,14 @@ var T = new Twit(config);
 var stream = T.stream('user');
 
 //streams
-//stream.on('follow', followed);
+stream.on('follow', followed);
 stream.on('tweet', replyToTweet)
 
 //makeMediaPost test variables
 var filename = "../images/gort.jpg";
 var msg = "This picture is so good, I will post it twice! #Gort";
 //makeMediaPost(filename, msg);
+
 
 redditRequest();
 
@@ -81,7 +82,7 @@ function followed(event) {
 
   console.log('I have been followed!');
 
-  var followTweet = 'Thanks for following me @' + handle + '!';
+  var followTweet = '@' + handle + ' Thanks for following me !';
   tweetIt(followTweet);
 }
 
@@ -102,29 +103,34 @@ function tweeted(err, data, response) {
   }
 }
 
-function hourlyTweet(permalink, title){
+function hourlyTweet(permalink, author){
   console.log('perma ', permalink);
-  var reddevilsTweet = "Title: \"" + title + "\" \n " +
-  "reddit.com" + permalink;
+  var reddevilsTweet = "Submitted by: /u/" + author + "\n" +  "reddit.com" + permalink;
+  console.log(reddevilsTweet)
   tweetIt(reddevilsTweet);
 }
 
 function redditRequest(){
   request(url, function(error, response, body) {
     var redditResponse = JSON.parse(body);
-    if(redditResponse.data.children.length > 0 && error == "null"){
+    if(redditResponse.data.children.length > 0 && error == null){
       permalink = redditResponse.data.children[0].data.permalink;
       var permaString = permalink.toString();
       var title = redditResponse.data.children[0].data.title.toString();
-      console.log(permaString, title);
-      hourlyTweet(permaString, title);
+      var author = redditResponse.data.children[0].data.author.toString();
+      hourlyTweet(permaString, author);
     } else {
       var newURL = "https://www.reddit.com/r/reddevils/new.json?limit=1";
       request(newURL, function(newError, newResponse, newBody){
-        var newRedditResponse = JSON.parse(newBody);
-        var newPermalink = newRedditResponse.data.children[0].data.permalink.toString();
-        var newTitle = newRedditResponse.data.children[0].data.title.toString();
-        hourlyTweet(newPermalink, newTitle);
+        if(newError.toString() == null){
+          var newRedditResponse = JSON.parse(newBody);
+          var newPermalink = newRedditResponse.data.children[0].data.permalink.toString();
+          var newTitle = newRedditResponse.data.children[0].data.title.toString();
+          var author = redditResponse.data.children[0].data.author.toString();
+          hourlyTweet(newPermalink, author);
+        } else{
+          console.log('Last case scenario', newError);
+        }
       });
     }
 
