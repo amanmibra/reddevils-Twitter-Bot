@@ -121,10 +121,12 @@ function redditRequest(){
     } else {
       var newURL = "https://www.reddit.com/r/reddevils/new.json?limit=1";
       request(newURL, function(newError, newResponse, newBody){
-        var newRedditResponse = JSON.parse(newBody);
-        var newPermalink = newRedditResponse.data.children[0].data.permalink.toString();
-        var newTitle = newRedditResponse.data.children[0].data.title.toString();
-        hourlyTweet(newPermalink, newTitle);
+        if(newError == "null"){
+          var newRedditResponse = JSON.parse(newBody);
+          var newPermalink = newRedditResponse.data.children[0].data.permalink.toString();
+          var newTitle = newRedditResponse.data.children[0].data.title.toString();
+          hourlyTweet(newPermalink, newTitle);
+        }
       });
     }
 
