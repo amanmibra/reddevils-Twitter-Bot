@@ -14,7 +14,7 @@ var T = new Twit(config);
 var stream = T.stream('user');
 
 //streams
-//stream.on('follow', followed);
+stream.on('follow', followed);
 stream.on('tweet', replyToTweet)
 
 //makeMediaPost test variables
@@ -82,7 +82,7 @@ function followed(event) {
 
   console.log('I have been followed!');
 
-  var followTweet = 'Thanks for following me @' + handle + '!';
+  var followTweet = '@' + handle + ' Thanks for following me !';
   tweetIt(followTweet);
 }
 
