@@ -96,11 +96,11 @@ function tweetIt(input) {
 
 function tweeted(err, data, response) {
   if (err) {
-    console.log('Not working');
+    console.log('Not working at' + new Date());
     console.log(err);
     setInterval(redditRequest, 1000*60*60);
   } else {
-    console.log('It worked!');
+    console.log('It worked at' + new Date());
   }
 }
 
