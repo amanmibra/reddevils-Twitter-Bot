@@ -126,6 +126,8 @@ function redditRequest(){
           var newPermalink = newRedditResponse.data.children[0].data.permalink.toString();
           var newTitle = newRedditResponse.data.children[0].data.title.toString();
           hourlyTweet(newPermalink, newTitle);
+        } else{
+          console.log('Last case scenario', newError);
         }
       });
     }
