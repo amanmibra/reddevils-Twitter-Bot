@@ -98,6 +98,7 @@ function tweeted(err, data, response) {
   if (err) {
     console.log('Not working');
     console.log(err);
+    setInterval(redditRequest, 1000*60*60);
   } else {
     console.log('It worked!');
   }
@@ -126,7 +127,7 @@ function redditRequest(){
           var newRedditResponse = JSON.parse(newBody);
           var newPermalink = newRedditResponse.data.children[0].data.permalink.toString();
           var newTitle = newRedditResponse.data.children[0].data.title.toString();
-          var author = redditResponse.data.children[0].data.author.toString();
+          var author = newRedditResponse.data.children[0].data.author.toString();
           hourlyTweet(newPermalink, author);
         } else{
           console.log('Last case scenario', newError);
