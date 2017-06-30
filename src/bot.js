@@ -87,10 +87,13 @@ function followed(event) {
 }
 
 function tweetIt(input) {
+  if(checkDuplicate(input)){
+    console.log('Caught duplicate tweet');
+    return;
+  }
   var tweet = {
     status: input
   };
-
   T.post('statuses/update', tweet, tweeted);
 }
 
@@ -137,4 +140,20 @@ function redditRequest(){
 
     setInterval(redditRequest, 1000*60*60);
   });
+}
+
+function checkDuplicate(tweet){
+  var isDuplicate = false;
+  var params = {
+    screen_name: "reddevilsbot",
+    count: 10
+  }
+  T.get('statuses/user_timeline', params, function (err, data, response){
+    for(var j = 0; j < 10; j++){
+      if(data[j].text == tweet){
+        isDuplicate = true;
+      }
+    }
+  });
+  return isDuplicate;
 }
