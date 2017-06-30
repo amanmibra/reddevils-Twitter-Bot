@@ -152,7 +152,7 @@ function checkDuplicate(tweet){
   }
   T.get('statuses/user_timeline', params, function (err, data, response){
     for(var j = 0; j < 10; j++){
-      if(data[j].text == tweet){
+      if(data[j].text.toString() == tweet){
         isDuplicate = true;
       }
     }
