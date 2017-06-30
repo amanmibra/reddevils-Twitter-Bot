@@ -109,7 +109,7 @@ function tweeted(err, data, response) {
 
 function hourlyTweet(permalink, author, title){
   console.log('perma ', permalink);
-  var reddevilsTweet = "Title: \"" + title + "\"\n Submitted by: /u/" + author + "\n" +  "reddit.com" + permalink;
+  var reddevilsTweet = "\"" + title + "\" - /u/" + author + "\n" +  "reddit.com" + permalink;
   console.log(reddevilsTweet)
   tweetIt(reddevilsTweet);
 }
@@ -161,8 +161,8 @@ function checkDuplicate(tweet){
 }
 
 function titleChecker(title){
-  if(title.length > 50){
-    title = title.substring(0, 50);
+  if(title.length > 70){
+    title = title.substring(0, 70);
   } else {
     return title;
   }
