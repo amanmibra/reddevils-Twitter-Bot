@@ -17,11 +17,6 @@ var stream = T.stream('user');
 stream.on('follow', followed);
 stream.on('tweet', replyToTweet)
 
-//makeMediaPost test variables
-var filename = "../images/gort.jpg";
-var msg = "This picture is so good, I will post it twice! #Gort";
-//makeMediaPost(filename, msg);
-
 
 redditRequest();
 
