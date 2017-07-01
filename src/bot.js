@@ -20,8 +20,6 @@ stream.on('tweet', replyToTweet)
 
 redditRequest();
 
-
-
 function followed(event) {
   var name = event.source.name;
   var handle = event.source.screen_name;
@@ -98,7 +96,7 @@ function hourlyTweet(permalink, author, title) {
     for (var j = 0; j < 1; j++) {
       if (data[j].text.substring(0, 10) == reddevilsTweet.substring(0, 10)) {
         console.log('Caught Duplicate');
-        if(!newRequest){
+        if (!newRequest) {
           newRedditRequest();
         }
         return;
@@ -145,11 +143,15 @@ function titleChecker(title) {
   if (title.length > 70) {
     words = title.split(' ');
     title = '';
-    words.forEach(function(word){
-      if(title.length > 70){
+    words.forEach(function(word) {
+      if (title.length > 70) {
         return;
       }
-      title = title + ' ' + word;
+      if (title == '') {
+        title = word;
+      } else {
+        title = title + ' ' + word;
+      }
     });
   } else {
     return title;
