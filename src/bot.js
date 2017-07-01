@@ -12,15 +12,17 @@ var url = "https://www.reddit.com/r/reddevils/top.json?sort=top&t=hour&limit=1";
 var permalink = '';
 var T = new Twit(config);
 var stream = T.stream('user');
+var newRequest = false;
 
 //streams
 stream.on('follow', followed);
 stream.on('tweet', replyToTweet)
 
-
 redditRequest();
 
 function replyToTweet(event) {
+  console.log('EVENT ---- ', event)
+
   var replyTo = event.in_reply_to_screen_name;
   var text = event.text;
   var from = event.user.screen_name;
@@ -30,7 +32,7 @@ function replyToTweet(event) {
 
   var randNumChecker = fromTweetLwrcse.search("random") != -1 && fromTweetLwrcse.search("number") != -1;
 
-  if (replyTo == "reddevilsbot" || text.search("@reddevilsbot") != -1 && from != "reddevilsbot") {
+  if ((replyTo == "reddevilsbot" || text.search("@reddevilsbot") != -1) && from != "reddevilsbot") {
     if (randNumChecker) {
       var number = Math.round(Math.random() * 100);
       var tweetMsg = '@' + from + ' ' + number;
@@ -82,10 +84,6 @@ function followed(event) {
 }
 
 function tweetIt(input) {
-  if(checkDuplicate(input)){
-    console.log('Caught duplicate tweet');
-    return;
-  }
   var tweet = {
     status: input
   };
@@ -95,71 +93,78 @@ function tweetIt(input) {
 function tweeted(err, data, response) {
   if (err) {
     console.log('Not working at ' + new Date());
-    console.log(err);
-    setInterval(redditRequest, 1000*60*60);
+    console.log("ERROR: ", err.message);
   } else {
     console.log('It worked at ' + new Date());
   }
 }
 
-function hourlyTweet(permalink, author, title){
+function hourlyTweet(permalink, author, title) {
   console.log('perma ', permalink);
-  var reddevilsTweet = "\"" + title + "\" - /u/" + author + "\n" +  "reddit.com" + permalink;
+  var reddevilsTweet = "\"" + title + "\" - /u/" + author + "\n" + "reddit.com" + permalink;
   console.log(reddevilsTweet)
-  tweetIt(reddevilsTweet);
+
+  var params = {
+    screen_name: "reddevilsbot",
+    count: 1
+  }
+  T.get('statuses/user_timeline', params, function(err, data, response) {
+    for (var j = 0; j < 1; j++) {
+      if (data[j].text.substring(0, 10) == reddevilsTweet.substring(0, 10)) {
+        console.log('Caught Duplicate');
+        if(!newRequest){
+          newRedditRequest();
+        }
+        return;
+      }
+    }
+    tweetIt(reddevilsTweet);
+  });
+  setInterval(redditRequest, 1000 * 60 * 60);
 }
 
-function redditRequest(){
+function redditRequest() {
   request(url, function(error, response, body) {
+    newRequest = false;
     var redditResponse = JSON.parse(body);
-    if(redditResponse.data.children.length > 0 && error == null){
+    if (redditResponse.data.children.length > 0 && error == null) {
       permalink = redditResponse.data.children[0].data.permalink;
       var permaString = permalink.toString();
       var title = redditResponse.data.children[0].data.title.toString();
       title = titleChecker(title);
       var author = redditResponse.data.children[0].data.author.toString();
       hourlyTweet(permaString, author, title);
+      setInterval(redditRequest, 1000 * 60 * 60);
     } else {
-      var newURL = "https://www.reddit.com/r/reddevils/new.json?limit=1";
-      request(newURL, function(newError, newResponse, newBody){
-        if(newError == null){
-          var newRedditResponse = JSON.parse(newBody);
-          var newPermalink = newRedditResponse.data.children[0].data.permalink.toString();
-          var newTitle = newRedditResponse.data.children[0].data.title.toString();
-          newTitle = titleChecker(newTitle);
-          var author = newRedditResponse.data.children[0].data.author.toString();
-          hourlyTweet(newPermalink, author, newTitle);
-        } else{
-          console.log('Last case scenario', newError);
-        }
-      });
+      newRedditRequest();
     }
-
-    setInterval(redditRequest, 1000*60*60);
   });
 }
 
-function checkDuplicate(tweet){
-  var isDuplicate = false;
-  var params = {
-    screen_name: "reddevilsbot",
-    count: 10
-  }
-  T.get('statuses/user_timeline', params, function (err, data, response){
-    for(var j = 0; j < 10; j++){
-      if(data[j].text == tweet){
-        isDuplicate = true;
-      }
-    }
-  });
-  return isDuplicate;
-}
-
-function titleChecker(title){
-  if(title.length > 70){
+function titleChecker(title) {
+  if (title.length > 70) {
     title = title.substring(0, 70);
   } else {
     return title;
   }
   return title + "...";
+}
+
+function newRedditRequest() {
+  newRequest = true;
+  var newURL = "https://www.reddit.com/r/reddevils/new.json?limit=1";
+  request(newURL, function(newError, newResponse, newBody) {
+    if (newError == null) {
+      var newRedditResponse = JSON.parse(newBody);
+      var newPermalink = newRedditResponse.data.children[0].data.permalink.toString();
+      var newTitle = newRedditResponse.data.children[0].data.title.toString();
+      newTitle = titleChecker(newTitle);
+      var author = newRedditResponse.data.children[0].data.author.toString();
+      hourlyTweet(newPermalink, author, newTitle);
+      setInterval(redditRequest, 1000 * 60 * 60);
+    } else {
+      console.log('Last case scenario', newError);
+    }
+  });
+
 }
