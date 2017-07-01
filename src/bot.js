@@ -143,7 +143,14 @@ function replyToTweet(event) {
 
 function titleChecker(title) {
   if (title.length > 70) {
-    title = title.substring(0, 70);
+    words = title.split(' ');
+    title = '';
+    words.forEach(function(word){
+      if(title.length > 70){
+        return;
+      }
+      title = title + ' ' + word;
+    });
   } else {
     return title;
   }
