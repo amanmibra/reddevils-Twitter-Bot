@@ -57,10 +57,10 @@ function redditRequest() {
       title = titleChecker(title);
       var author = redditResponse.data.children[0].data.author.toString();
       hourlyTweet(permaString, author, title);
-      setInterval(redditRequest, 1000 * 60 * 60);
     } else {
       newRedditRequest();
     }
+    setInterval(redditRequest, 1000 * 60 * 60);
   });
 }
 
@@ -75,7 +75,6 @@ function newRedditRequest() {
       newTitle = titleChecker(newTitle);
       var author = newRedditResponse.data.children[0].data.author.toString();
       hourlyTweet(newPermalink, author, newTitle);
-      setInterval(redditRequest, 1000 * 60 * 60);
     } else {
       console.log('Last case scenario', newError);
     }
