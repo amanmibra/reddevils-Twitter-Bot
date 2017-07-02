@@ -95,7 +95,7 @@ function hourlyTweet(permalink, author, title) {
   T.get('statuses/user_timeline', params, function(err, data, response) {
     for (var j = 0; j < 100; j++) {
       if (data[j].text.substring(0, 10) == reddevilsTweet.substring(0, 10)) {
-        console.log('Caught Duplicate at' + new Date());
+        console.log('Caught Duplicate at ' + new Date());
         if (newRequest == false) {
           newRedditRequest();
         }
