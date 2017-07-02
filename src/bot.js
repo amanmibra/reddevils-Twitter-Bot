@@ -12,7 +12,7 @@ var url = "https://www.reddit.com/r/reddevils/top.json?sort=top&t=hour&limit=1";
 var permalink = '';
 var T = new Twit(config);
 var stream = T.stream('user');
-var newRequest = false;
+var newRequest;
 
 //streams
 stream.on('follow', followed);
@@ -96,7 +96,7 @@ function hourlyTweet(permalink, author, title) {
     for (var j = 0; j < 1; j++) {
       if (data[j].text.substring(0, 10) == reddevilsTweet.substring(0, 10)) {
         console.log('Caught Duplicate');
-        if (!newRequest) {
+        if (newRequest == false) {
           newRedditRequest();
         }
         return;
@@ -104,7 +104,6 @@ function hourlyTweet(permalink, author, title) {
     }
     tweetIt(reddevilsTweet);
   });
-  setInterval(redditRequest, 1000 * 60 * 60);
 }
 
 function replyToTweet(event) {
