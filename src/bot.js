@@ -90,10 +90,10 @@ function hourlyTweet(permalink, author, title) {
 
   var params = {
     screen_name: "reddevilsbot",
-    count: 1
+    count: 100
   }
   T.get('statuses/user_timeline', params, function(err, data, response) {
-    for (var j = 0; j < 1; j++) {
+    for (var j = 0; j < 100; j++) {
       if (data[j].text.substring(0, 10) == reddevilsTweet.substring(0, 10)) {
         console.log('Caught Duplicate');
         if (newRequest == false) {
