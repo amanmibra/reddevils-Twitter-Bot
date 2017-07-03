@@ -60,7 +60,7 @@ function redditRequest() {
     } else {
       newRedditRequest();
     }
-    setInterval(redditRequest, 1000 * 60 * 60);
+    //setInterval(redditRequest, 1000 * 60 * 60);
   });
 }
 
@@ -106,8 +106,6 @@ function hourlyTweet(permalink, author, title) {
 }
 
 function replyToTweet(event) {
-  console.log('EVENT ---- ', event)
-
   var replyTo = event.in_reply_to_screen_name;
   var text = event.text;
   var from = event.user.screen_name;
