@@ -60,7 +60,7 @@ function redditRequest() {
     } else {
       newRedditRequest();
     }
-    //setInterval(redditRequest, 1000 * 60 * 60);
+    setInterval(redditRequest, 1000 * 60 * 60);
   });
 }
 
